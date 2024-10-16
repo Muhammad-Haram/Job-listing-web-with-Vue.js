@@ -1,29 +1,91 @@
-# job listing
+<h1>Options Api vs Composition Api</h1>
 
-This template should help get you started developing with Vue 3 in Vite.
 
-## Recommended IDE Setup
+<h1>Options Api</h1>
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+<script>
+export default {
+    data() {
+        return {
+            name: "Muhammad Haram",
+            status: "active",
+            tasks: ['1', '2', '3', '4', '5'],
+            link: "https://github.com/"
+        };
+    },
+    methods: {
+        toggleStatus() {
+            if (this.status === "active") {
+                this.status = "pending";
+            } else if (this.status === "pending") {
+                this.status = "inactive";
+            } else {
+                this.status = "active";
+            }
+        },
+    }
+}
+</script>
 
-## Customize configuration
+<template>
+    <h1>{{ name }}</h1>
+    <p v-if="status === 'active'">User is Active</p>
+    <p v-else-if="status === 'pending'">User is pending</p>
+    <p v-else>User is not active</p>
+    <h1>tasks</h1>
+    <ul>
+        <li v-for="task in tasks" :key='task'>{{ task }}</li>
+    </ul>
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+    <a v-bind:href="link">github</a>
+    <button @click="toggleStatus">click</button>
 
-## Project Setup
+</template>
 
-```sh
-npm install
-```
 
-### Compile and Hot-Reload for Development
+<h1>Composition Api</h1>
 
-```sh
-npm run dev
-```
+<script>
+import { ref } from 'vue'
 
-### Compile and Minify for Production
+export default {
+    setup() {
+        const name = ref("Muhammmad Haram");
+        const status = ref("active");
+        const tasks = ref(["task1", "task2", "task3"]);
 
-```sh
-npm run build
-```
+        const toggleStatus = () => {
+            if (status.value === "active") {
+                status.value = "pending";
+            } else if (status.value === "pending") {
+                status.value = "inactive";
+            } else {
+                status.value = "active";
+            }
+        }
+
+        return {
+            name,
+            status,
+            tasks,
+            toggleStatus
+        }
+
+    }
+}
+</script>
+
+<template>
+    <h1>{{ name }}</h1>
+    <p v-if="status === 'active'">User is Active</p>
+    <p v-else-if="status === 'pending'">User is pending</p>
+    <p v-else>User is not active</p>
+    <h1>tasks</h1>
+    <ul>
+        <li v-for="task in tasks" :key='task'>{{ task }}</li>
+    </ul>
+
+    <button @click="toggleStatus">click</button>
+
+</template>
+
