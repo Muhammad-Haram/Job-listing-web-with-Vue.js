@@ -1,25 +1,47 @@
-<script>
-export default {
-    data() {
-        return {
-            name: "Muhammad Haram",
-            status: "active",
-            tasks: ['1', '2', '3', '4', '5'],
-            link: "https://github.com/"
-        };
-    },
-    methods: {
-        toggleStatus() {
-            if (this.status === "active") {
-                this.status = "pending";
-            } else if (this.status === "pending") {
-                this.status = "inactive";
-            } else {
-                this.status = "active";
-            }
-        },
+<!-- todo list code -->
+
+<script setup>
+import { ref, onMounted } from 'vue'
+
+
+const name = ref("Muhammmad Haram");
+const status = ref("active");
+const tasks = ref(["task1", "task2", "task3"]);
+const newTask = ref("")
+
+const toggleStatus = () => {
+    if (status.value === "active") {
+        status.value = "pending";
+    } else if (status.value === "pending") {
+        status.value = "inactive";
+    } else {
+        status.value = "active";
     }
 }
+
+const addTask = () => {
+    if (newTask.value.trim() !== "") {
+        tasks.value.push(newTask.value);
+        newTask.value = ""
+    }
+}
+
+const deleteTask = (index) => {
+    tasks.value.splice(index, 1);
+}
+
+onMounted(async () => {
+    try {
+
+        const res = await fetch("https://jsonplaceholder.typicode.com/todos")
+        const data = await res.json();
+        tasks.value = data.map((task) => (task.title))
+
+    } catch (error) {
+        console.log(error, "api fetch failed")
+    }
+})
+
 </script>
 
 <template>
@@ -29,10 +51,18 @@ export default {
     <p v-else>User is not active</p>
     <h1>tasks</h1>
     <ul>
-        <li v-for="task in tasks" :key='task'>{{ task }}</li>
+        <li v-for="(task, index) in tasks" :key='task'>
+            <span>{{ task }}</span>
+            <button @click="deleteTask(index)">x</button>
+        </li>
     </ul>
 
-    <a v-bind:href="link">github</a>
     <button @click="toggleStatus">click</button>
+
+    <form @submit.prevent="addTask">
+        <label for="newTask"></label>
+        <input type="text" id="newTask" name="newTask" v-model="newTask" />
+        <button type="submit">Submit</button>
+    </form>
 
 </template>
