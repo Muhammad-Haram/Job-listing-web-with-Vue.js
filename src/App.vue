@@ -1,5 +1,9 @@
+<script setup>
+import Navbar from './components/Navbar.vue';
+import Hero from './components/Hero.vue';
+</script>
+
 <template>
-    <h1 class="text-3xl font-bold">
-      Hello world!
-    </h1>
-  </template>
+  <Navbar />
+  <Hero/>
+</template>
