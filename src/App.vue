@@ -4,6 +4,6 @@ import Hero from './components/Hero.vue';
 </script>
 
 <template>
-  <Navbar />
-  <Hero/>
+    <Navbar />
+    <Hero title="Job Listing Website" />
 </template>
